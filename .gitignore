@@ -1,0 +1,25 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyc
+.pytest_cache/
+
+# Virtual environment
+venv/
+.env
+
+# IDE settings
+.vscode/
+.idea/
+
+# Local development
+*.log
+backups/
+
+# Keep init SQL scripts
+*.sql
+!init-scripts/*.sql
+
+# System files
+.DS_Store
+Thumbs.db

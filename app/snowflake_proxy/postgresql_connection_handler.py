@@ -7,7 +7,7 @@ from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
-class SnowflakeConnectionHandler:
+class PostgreSQLConnectionHandler:
     """Handles PostgreSQL connections while mimicking Snowflake connection behavior"""
     
     def __init__(self):

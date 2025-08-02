@@ -2,9 +2,18 @@ import logging
 from typing import Any
 
 import requests
-from snowflake.connector import ProgrammingError
 
-SnowflakeProgrammingError = ProgrammingError
+# return snowflake.connector.connect(
+#         user=self.user,
+#         private_key=self.pkb,
+#         password=self.password,
+#         account=self.account,
+#         warehouse=self.warehouse,
+#         database=self.database,
+#         schema=self.schema,
+#         autocommit=autocommit,
+#         session_parameters=session_parameters,
+#     )
 
 
 class SnowflakeLocalClient:
@@ -192,52 +201,3 @@ class LocalSnowflakeConnection:
             )
 
         return result["result"]
-
-    def cursor(self, **kwargs):
-        """Return a mock cursor"""
-        return LocalSnowflakeCursor(self.connection_id, self.proxy_url, self.log)
-
-
-class LocalSnowflakeCursor:
-    """Mock Snowflake cursor"""
-
-    def __init__(self, connection_id: str, proxy_url: str, logger):
-        self.connection_id = connection_id
-        self.proxy_url = proxy_url
-        self.log = logger
-        self._results = None
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-    def execute(self, query: str, params: Any = None):
-        """Execute a query"""
-        payload = {
-            "connection_id": self.connection_id,
-            "query": query,
-            "params": params,
-        }
-
-        response = requests.post(
-            f"{self.proxy_url}/v1/query",
-            json=payload,
-            headers={"Content-Type": "application/json"},
-        )
-
-        if response.status_code != 200:
-            raise Exception(f"Query execution failed: {response.text}")
-
-        result = response.json()
-        if not result["success"]:
-            raise Exception(
-                f"Query execution failed: {result.get('error', 'Unknown error')}"
-            )
-
-        self._results = result["result"]
-
-    def fetchall(self):
-        """Fetch all results"""
-        return self._results or []
