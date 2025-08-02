@@ -1,0 +1,34 @@
+{
+    "name": "Snowflake Localhost Dev Environment",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "snowflake-proxy",
+    "workspaceFolder": "/app",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.flake8",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-vscode.vscode-json",
+                "ms-vscode.vscode-yaml",
+                "redhat.vscode-yaml",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.flake8Enabled": true,
+                "python.formatting.provider": "black",
+                "python.sortImports.args": ["--profile", "black"],
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                }
+            }
+        }
+    },
+    "forwardPorts": [4566, 5432],
+    "postCreateCommand": "pip install -r requirements.txt",
+    "remoteUser": "root"
+} 
