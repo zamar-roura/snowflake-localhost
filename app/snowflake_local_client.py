@@ -50,7 +50,7 @@ class SnowflakeMockClient:
 
     def _get_connection(
         self, autocommit: bool = True, session_parameters: Any = None
-    ) -> "LocalSnowflakeConnection":
+    ) -> "SnowflakeMockConnection":
         """Create a connection to the local proxy"""
         if not self.connection_id:
             # Create connection through proxy
@@ -78,7 +78,7 @@ class SnowflakeMockClient:
             self.connection_id = result["connection_id"]
             self.log.info(f"Created local connection: {self.connection_id}")
 
-        return LocalSnowflakeConnection(self.connection_id, self.proxy_url, self.log)
+        return SnowflakeMockConnection(self.connection_id, self.proxy_url, self.log)
 
     def execute_query(
         self,
@@ -155,7 +155,7 @@ class SnowflakeMockClient:
                 self.log.error(f"Error closing connection: {str(e)}")
 
 
-class LocalSnowflakeConnection:
+class SnowflakeMockConnection:
     """Mock Snowflake connection that uses the local proxy"""
 
     def __init__(self, connection_id: str, proxy_url: str, logger):
