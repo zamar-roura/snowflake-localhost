@@ -1,7 +1,8 @@
 # Python cache files
-__pycache__/
-*.py[cod]
-*.pyc
+**/__pycache__/
+**/*.py[cod]
+**/*.pyc
+.pytest_cache/
 .pytest_cache/
 
 # Virtual environment
