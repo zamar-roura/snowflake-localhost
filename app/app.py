@@ -3,7 +3,6 @@ import os
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
 from postgresql_connection_handler import PostgreSQLConnectionHandler
 from sqlglotparser.sqlglot_parser import SQLGlotParser
 
@@ -67,17 +66,16 @@ def execute_query():
         data = request.get_json()
         logger.info(f"Received query request: {data}")
 
+        # Before stablishing connection with Postgresql we check
+        # that the query is properly parsed
 
-        # Before stablishing connection with Postgresql we check that the query is properly parsed
-   
         connection_id = data.get("connection_id")
         query = data.get("query")
         params = data.get("params")
-        
-             
+
         result = sql_translator_parser.parse(query, target_dialect="postgres")
-        translated_query = result["translated_sql"] 
-        
+        translated_query = result["translated_sql"]
+
         if not connection_id or not query:
             return (
                 jsonify(
@@ -90,8 +88,7 @@ def execute_query():
         debug_mode = data.get("debug", False)
 
         # Translate Snowflake SQL to PostgreSQL
-     
-    
+
         logger.info(f"Translated query: {translated_query}")
 
         # Execute query
