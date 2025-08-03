@@ -4,8 +4,8 @@ import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from snowflake_proxy.postgresql_connection_handler import PostgreSQLConnectionHandler
-from snowflake_proxy.sql_translator import SnowflakeToPostgreSQLTranslator
+from postgresql_connection_handler import PostgreSQLConnectionHandler
+from sqlglotparser.sqlglot_parser import SQLGlotParser
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,7 +16,7 @@ CORS(app)
 
 # Initialize components
 connection_handler = PostgreSQLConnectionHandler()
-sql_translator = SnowflakeToPostgreSQLTranslator()
+sql_translator_parser = SQLGlotParser()
 
 
 @app.route("/health", methods=["GET"])
@@ -67,10 +67,17 @@ def execute_query():
         data = request.get_json()
         logger.info(f"Received query request: {data}")
 
+
+        # Before stablishing connection with Postgresql we check that the query is properly parsed
+   
         connection_id = data.get("connection_id")
         query = data.get("query")
         params = data.get("params")
-
+        
+             
+        result = sql_translator_parser.parse(query, target_dialect="postgres")
+        translated_query = result["translated_sql"] 
+        
         if not connection_id or not query:
             return (
                 jsonify(
@@ -83,7 +90,8 @@ def execute_query():
         debug_mode = data.get("debug", False)
 
         # Translate Snowflake SQL to PostgreSQL
-        translated_query = sql_translator.translate(query, debug=debug_mode)
+     
+    
         logger.info(f"Translated query: {translated_query}")
 
         # Execute query

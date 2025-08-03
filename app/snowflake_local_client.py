@@ -16,7 +16,7 @@ import requests
 #     )
 
 
-class SnowflakeLocalClient:
+class SnowflakeMockClient:
     """Modified Snowflake client that connects to local PostgreSQL proxy"""
 
     def __init__(
