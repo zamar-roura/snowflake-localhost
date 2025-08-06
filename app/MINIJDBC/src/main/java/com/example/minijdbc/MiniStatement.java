@@ -72,9 +72,7 @@ public class MiniStatement implements Statement {
                 // Handle the result
                 if (result.containsKey("result")) {
                     // Create a ResultSet from the data
-                    Map<String, Object> resultData = new HashMap<>();
-                    resultData.put("resultSet", result.get("result"));
-                    currentResultSet = new MiniResultSet(resultData);
+                    currentResultSet = new MiniResultSet(result.get("result"));
                     return true;
                 } else {
                     // For DDL/DML operations that don't return results

@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Calendar;
@@ -15,10 +16,23 @@ public class MiniResultSet implements ResultSet {
     private boolean isClosed = false;
 
     @SuppressWarnings("unchecked")
-    public MiniResultSet(Map<String, Object> result) {
-        Map<String, Object> resultSet = (Map<String, Object>) result.get("resultSet");
-        this.rows = (List<Map<String, Object>>) resultSet.get("rows");
-        this.columnNames = (List<String>) resultSet.get("columns");
+    public MiniResultSet(Object result) {
+        if (result instanceof List) {
+            // Direct list of results from Flask app
+            this.rows = (List<Map<String, Object>>) result;
+            if (!rows.isEmpty()) {
+                this.columnNames = new ArrayList<>(rows.get(0).keySet());
+            } else {
+                this.columnNames = new ArrayList<>();
+            }
+        } else if (result instanceof Map) {
+            // ResultSet format with explicit columns
+            Map<String, Object> resultMap = (Map<String, Object>) result;
+            this.rows = (List<Map<String, Object>>) resultMap.get("rows");
+            this.columnNames = (List<String>) resultMap.get("columns");
+        } else {
+            throw new IllegalArgumentException("Unsupported result type: " + result.getClass());
+        }
     }
 
     @Override
