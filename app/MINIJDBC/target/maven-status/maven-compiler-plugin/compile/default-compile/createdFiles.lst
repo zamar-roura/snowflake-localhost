@@ -1,0 +1,4 @@
+com/example/minijdbc/MiniDriver.class
+com/example/minijdbc/MiniResultSet.class
+com/example/minijdbc/MiniStatement.class
+com/example/minijdbc/MiniConnection.class

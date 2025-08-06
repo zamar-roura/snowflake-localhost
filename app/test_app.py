@@ -54,7 +54,7 @@ def test_postgresql_create_table_fails():
         CREATE TABLE customers (
             customer_id SERIAL PRIMARY KEY,
             first_name VARCHAR(50),
-            last_name VARCHAR(50),
+            last_name VARCHAR(50),mvn clean package
             email VARCHAR(255),
             created_at TIMESTAMP WITHOUT TIME ZONE
         )
